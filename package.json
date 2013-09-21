@@ -20,21 +20,13 @@
   "license": "MIT",
   "readmeFilename": "README.md",
   "gitHead": "1217bf4722768514fe15ff904dab59f848d146f4",
+ 
   "dependencies": {
     "commander": "~2.0.0",
     "yesno":    "0.0.x",
     "wrench":   "~1.5.1",
     "connect":  "2.9.x",
-    "mustache": "~0.7.2"
-  },
-  "devDependencies": {
-    "grunt": "~0.4.1",
-    "typescript": "~0.8.3",
-    "grunt-open": "~0.2.2",
-    "grunt-typescript": "~0.1.6",
-    "grunt-contrib-watch": "~0.3.1",
-    "grunt-contrib-copy": "~0.4.1",
-    "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-uglify": "~0.2.4"
+    "mustache": "~0.7.2",
+    "photonstorm/phaser":   "git://github.com/tchannel/phaser.git#source-maps-and-stuff"
   }
 }

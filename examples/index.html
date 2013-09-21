@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<head>
+    <meta charset="utf-8" />
+    <title>Phaser Examples</title>
+    <link rel="stylesheet" href="phaser.css" type="text/css" />
+</head>
+<body>
+
+    <div id="header">
+        <h1 id="title">Phaser Test Suite</h1>
+    </div>
+
+    <div id="links">
+        {{#examples}}
+            <h2>{{name}} ({{files.length}} examples)</h2>
+            {{#files}}
+                <a href="{{name}}/{{example_name}}.example.html" class='button'>{{example_name}}</a>
+            {{/files}}
+        {{/examples}}
+    </div>
+
+</body>
+</html>

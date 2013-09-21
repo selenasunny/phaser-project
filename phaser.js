@@ -35,6 +35,68 @@ function copyFile(source, target, cb) {
 }
 
 
+var routes = [
+    /**
+     * Handle the main index page
+     */
+    {
+        match: ["/index.html", "/"],
+        handler: function (req, res, next) {
+            var list = fs.readdirSync("./projects");
+            list.splice(list.indexOf('.gitignore'),1);
+
+            list = list.map(function(elem) {
+                return {name: elem};
+            });
+
+            var html = fs.readFileSync(__dirname+"/index.html");
+
+            html = mu.to_html(html.toString(), {name: "TEST?", projects: list});
+
+            res.end(html);
+        }
+    },
+    /**
+     * Handle the examples page
+     */
+    {
+        match: ["/examples","/examples/","/examples/index.html"],
+        handler: function (req, res, next) {
+            var list = fs.readdirSync('./examples/');
+            list.splice(list.indexOf('assets'),1);
+
+            var examples = [];
+
+            for (ind in list) {
+                i = list[ind];
+                if(i.indexOf('.') == -1) {
+                    var dir = {name : i, files: []};
+
+                    var filelist =  fs.readdirSync('./examples/'+i);
+                    for (file in filelist) {
+                        k = filelist[file];
+                        ind = k.indexOf(".example.html"); 
+                        if (ind >= 0) {
+                            var name = k.substring(0, ind);
+                            dir.files.push({example_name: name});
+                        }
+                    }
+                    examples.push(dir);
+                }
+            }
+  
+
+            var html = fs.readFileSync(__dirname+"/examples/index.html");
+            html = mu.to_html(html.toString(), {examples: examples});
+
+            res.end(html);
+        }
+    }
+];
+
+
+
+
 program.command('project:make [project]')
     .description('Create a new Phaser project')
     .action(function(project) {
@@ -63,11 +125,11 @@ program.command('project:make [project]')
             fs.mkdirSync(path+'/phaser/build');
             fs.mkdirSync(path+'/phaser/src');
 
-            wrench.copyDirSyncRecursive('./build', path+"/phaser/build/", {
+            wrench.copyDirSyncRecursive('./node_modules/Phaser/build', path+"/phaser/build/", {
                 preserveFiles:  true,
                 forceDelete:    true
             });
-            wrench.copyDirSyncRecursive('./src', path+"/phaser/src/", {
+            wrench.copyDirSyncRecursive('./node_modules/Phaser/src', path+"/phaser/src/", {
                 preserveFiles:  true,
                 forceDelete:    true
             });
@@ -85,7 +147,6 @@ program.command('project:delete [project]')
             process.exit(0);
         }
 
-
         yesno.ask('Are you sure you want to delete '+project+'? [y/N]', false, function(ok) {
             if(ok) {
                 wrench.rmdirSyncRecursive("./projects/"+project);
@@ -97,9 +158,7 @@ program.command('project:delete [project]')
                 process.exit(0);
             }
         });
-        
-            
-        
+       
     });
 
 program.command('project:list')
@@ -122,28 +181,17 @@ program.command('serve [port]')
             .use(function(req, res, next) {
             
                 path = req.originalUrl;
-
-                if(path == "/index.html" || path == "/") {
-  
-                    var list = fs.readdirSync("./projects");
-                    list.splice(list.indexOf('.gitignore'),1);
-
-                    list = list.map(function(elem) {
-                        return {name: elem};
-                    });
-
-                    var html = fs.readFileSync(__dirname+"/index.html");
-  
-                    html = mu.to_html(html.toString(), {name: "TEST?", projects: list});
-  
-                    res.end(html);
-                    return;
+                for (i in routes) {
+                    if (routes[i].match.indexOf(path) >=0 ) {
+                        routes[i].handler(req, res, next);
+                        return;
+                    }
                 }
                 next();
             })
             
             .use(connect.static(__dirname))
-            .listen(port)
+            .listen(port);
        
         process.stdout.write("\nDev server stated on port "+port+"\n");
         process.stdout.write("\nYou can view your projects by visting http://localhost:"+port+" in your browser\n\n");
