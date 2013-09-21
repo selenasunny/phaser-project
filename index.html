@@ -2,13 +2,19 @@
 <html>
 <head>
     <meta charset="UTF-8" />
-    <title>Phaser</title>
+    <title>Phasery</title>
     <!--<base href="../">-->
     
     <!--<meta name="viewport" content="initial-scale=1 maximum-scale=1 user-scalable=0" />-->
     
 </head>
 <body>
+    Projects:
+    {{#projects}}
+        <p>
+            <a href="projects/{{name}}/index.html">{{name}}</a>
+        </p>
+    {{/projects}}
 
 </body>
 </html>

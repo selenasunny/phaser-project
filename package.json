@@ -24,7 +24,8 @@
     "commander": "~2.0.0",
     "yesno":    "0.0.x",
     "wrench":   "~1.5.1",
-    "connect":  "2.9.x"
+    "connect":  "2.9.x",
+    "mustache": "~0.7.2"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

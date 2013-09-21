@@ -1,9 +1,11 @@
 #!/usr/bin/env node
 
 var fs      = require('fs');
+var mu      = require('mustache');
 var yesno   = require('yesno');
 var wrench  = require('wrench');
 var connect = require('connect');
+//var express = require('express');
 var program = require('commander');
 
 
@@ -114,12 +116,35 @@ program.command('serve [port]')
             port = 8000;
         }
 
-        
         var c = connect()
+            .use(connect.bodyParser())
             .use(connect.logger())
+            .use(function(req, res, next) {
+            
+                path = req.originalUrl;
+
+                if(path == "/index.html" || path == "/") {
+  
+                    var list = fs.readdirSync("./projects");
+                    list.splice(list.indexOf('.gitignore'),1);
+
+                    list = list.map(function(elem) {
+                        return {name: elem};
+                    });
+
+                    var html = fs.readFileSync(__dirname+"/index.html");
+  
+                    html = mu.to_html(html.toString(), {name: "TEST?", projects: list});
+  
+                    res.end(html);
+                    return;
+                }
+                next();
+            })
+            
             .use(connect.static(__dirname))
             .listen(port)
-
+       
         process.stdout.write("\nDev server stated on port "+port+"\n");
         process.stdout.write("\nYou can view your projects by visting http://localhost:"+port+" in your browser\n\n");
             
