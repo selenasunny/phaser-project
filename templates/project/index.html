@@ -6,7 +6,23 @@
     <!--<base href="../">-->
     <script type='text/javascript' src='phaser/build/phaser.min.js'></script>
     <!--<meta name="viewport" content="initial-scale=1 maximum-scale=1 user-scalable=0" />-->
-    
+    <script type='text/javascript'>
+        (function () {
+            var game = new Phaser.Game(800,600, Phaser.AUTO,'', {
+                preload:  function() {
+                    return this.game.load.image('logo', 'assets/logo.png');
+                },
+                create: function() {
+                    this.logo = this.game.add.sprite(this.game.world.centerX, this.game.world.centerY, 'logo');
+                    this.logo.anchor.x = 0.5;
+                    this.logo.anchor.y = 0.5;
+                    return this.logo.update = function() {
+                      return this.angle++;
+                    };
+                }
+            });
+        })();
+    </script> 
 </head>
 <body>
 
