@@ -1,3 +1,4 @@
+
 module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-typescript');
     grunt.loadNpmTasks('grunt-contrib-watch');
@@ -5,7 +6,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
 
-    var buildFile = require('./build.js')
+    var buildFile = require('./build.js');
 
     var wrapPhaserInUmd = function(content, isAddon) {
         var replacement = [
@@ -45,14 +46,6 @@ module.exports = function (grunt) {
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-
-
-        connect: {
-            server: {
-                port:8080,
-                keepalive: true
-            }
-        },
 
         typescript: {
             base: {

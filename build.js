@@ -1,7 +1,7 @@
 /**
   * This file specifies all the sourcefiles required for
   * phaser, in the order they should be loaded. This is used
-  * by the build-phaser and build-phaser-min tasks
+  * by the build-phaser and build-phaser-min module
  **/
 
 module.exports = {
