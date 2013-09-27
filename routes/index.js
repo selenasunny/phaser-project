@@ -6,7 +6,7 @@ var fs = require('fs');
 
 exports.index = function(req, res){
 
-    var list = fs.readdirSync(process.cwd()+"/projects");
+    var list = fs.readdirSync(process.cwd()+"/projects/userprojects");
     list.splice(list.indexOf('.gitignore'),1);
 
     list = list.map(function(elem) {

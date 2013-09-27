@@ -7,21 +7,24 @@ module.exports = new Project;
 self = module.exports;
 
 
+
 function Project() {
-    this.default_project = "hello_phaser";
+    this.default_template   = "hello_phaser";
+    this.base_project_path  = "./projects/userprojects/";
+    this.base_template_path = "./projects/templates/";
 }
 
 
 Project.prototype.make = function(project, base_project) {
 
-    var path = "./projects/"+project;
+    var path = self.base_project_path+project;
     
     if (!base_project) {
-        base_project = self.default_project;
+        base_project = self.default_template;
     }
 
-    if (! fs.existsSync('./templates/'+base_project)) {
-        console.log("Can't create a project for template "+base_project+"; no such template exists.");
+    if (! fs.existsSync(self.base_template_path+base_project)) {
+        console.log("Can't create a project from template "+base_project+"; no such template exists.");
         process.exit(0);
     }
 
@@ -40,7 +43,7 @@ Project.prototype.make = function(project, base_project) {
 
 
         // copy the "skeleton" of the project
-        wrench.copyDirSyncRecursive('./templates/'+base_project, path, {
+        wrench.copyDirSyncRecursive(self.base_template_path+base_project, path, {
             preserveFiles:  true,
             forceDelete:    true
         });
@@ -63,14 +66,16 @@ Project.prototype.make = function(project, base_project) {
 
 
 Project.prototype.delete = function(project) {
-    if(!fs.existsSync('./projects/'+project)) {
+    var _self = self;
+    
+    if(!fs.existsSync(self.base_project_path+project)) {
         console.log("Cannot delete '"+project+"'; no project named '"+project+"' exists.");
         process.exit(0);
     }
 
     yesno.ask('Are you sure you want to delete '+project+'? [y/N]', false, function(ok) {
         if(ok) {
-            wrench.rmdirSyncRecursive("./projects/"+project);
+            wrench.rmdirSyncRecursive(_self.base_project_path+project);
             process.stdout.write("Deleted "+project+". It's gone forever. You killed it. You monster.\n");
             process.exit(0);
         }

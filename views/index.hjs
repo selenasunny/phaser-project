@@ -17,7 +17,7 @@
     <h2>Projects</h2>
     {{#projects}}
         <p>
-            <a href="projects/{{name}}/index.html">{{name}}</a>
+            <a href="userprojects/{{name}}/index.html">{{name}}</a>
         </p>
     {{/projects}}
 
