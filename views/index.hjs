@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Phasery</title>
+    <!--<base href="../">-->
+    
+    <!--<meta name="viewport" content="initial-scale=1 maximum-scale=1 user-scalable=0" />-->
+    
+</head>
+<body>
+    <img src='/images/phaser-logo-small.png' />
+    <h2>Examples</h2>
+    <a href="examples/">Examples</a>
+    <hr />
+
+    <h2>Projects</h2>
+    {{#projects}}
+        <p>
+            <a href="projects/{{name}}/index.html">{{name}}</a>
+        </p>
+    {{/projects}}
+
+</body>
+</html>
