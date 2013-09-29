@@ -27,6 +27,9 @@
     "wrench":     "~1.5.1",
     "express":    "3.x",
     "hjs":        "*",
+    "semver":     "~2.1.0",
+    "request":    "~2.27.0",
+    "adm-zip":    "~0.4.3",
     "photonstorm/phaser":   "git://github.com/tchannel/phaser.git#source-maps-and-stuff"
   }
 }

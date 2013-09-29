@@ -5,14 +5,16 @@ var wrench      = require('wrench');
 
 //var express = require('express');
 var program     = require('commander');
-var https       = require('https');
-var versionFile = require('./phaser-project/utils/versionfile');
-var serve       = require('./phaser-project/utils/serve');
-var project     = require('./phaser-project/utils/project');
+var base        = require('./phaser-project/utils/base');
+var semver      = require('semver');
+
+var versions    = require(base.getPhaserProjectPath()+'/utils/versions');
+var serve       = require(base.getPhaserProjectPath()+'/utils/serve');
+var project     = require(base.getPhaserProjectPath()+'/utils/project');
 
 
-versionFile.initialize();
-
+versions.initFile();
+versions.syncFileFromFs();
 
 /**
  * Command for creating a new project
@@ -68,38 +70,9 @@ program.command('serve [port]')
  */
 program.command('engine:versions')
     .description('displays a list of available phaser versions')
-    .action(function () {
+    .action(function() {
         process.stdout.write("Fetching Phaser version list: \n");
-
-        // Issue a request to the github API to grab the list of tags
-        var req = https.request({
-                host:   'api.github.com',
-                path:   '/repos/photonstorm/phaser/git/refs/tags',
-                method: 'GET'
-            }, function (res) {
-                var body = '';
-                res.on('data', function(data) {
-                    body += data;
-                });
-
-                res.on('end', function() {
-                    data = JSON.parse(body);
-                    var tags = [];
-
-                    for (i in data) {
-                        tagData = data[i];
-                        tags.push(tagData.ref.replace(/refs\/tags\//,''));
-                    }
-                    console.log(tags);
-                });
-            }
-        );
-
-        req.on('error', function(err) {
-            console.log(err);
-        });
-
-        req.end();
+        versions.getAvailable(function(tags) { console.log(tags); });
     });
 
 
@@ -110,7 +83,21 @@ program.command('engine:versions')
 program.command('engine:update')
     .description('Downloads the latest version of the phaser engine')
     .action(function () {
+        versions.getAvailable(function(vers) {
+            var myLatest    = versions._latestLocal();
+            var realLatest  = versions._latestInList(vers);
 
+            if (semver.eq(myLatest, realLatest)) {
+                process.stdout.write("Latest version is "+realLatest+"; already installed.\n");
+                process.exit(0);
+            }
+
+            process.stdout.write("Downloading "+realLatest+"\n");
+            versions.getVersion(realLatest, function() {
+                process.stdout.write("Downloaded the latest version! ("+realLatest+")\n");
+                versions.syncFileFromFs();
+            });
+        });
     });
 
 

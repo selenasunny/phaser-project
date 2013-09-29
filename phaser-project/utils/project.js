@@ -1,7 +1,7 @@
 var fs      = require('fs');
 var wrench  = require('wrench');
 var yesno   = require('yesno');
-
+var base    = require('./base');
 
 module.exports = new Project;
 self = module.exports;
@@ -10,8 +10,8 @@ self = module.exports;
 
 function Project() {
     this.default_template   = "hello_phaser";
-    this.base_project_path  = process.cwd()+"/projects/userprojects/";
-    this.base_template_path = process.cwd()+"/projects/templates/";
+    this.base_project_path  = base.getProjectPath()+"/userprojects/";
+    this.base_template_path = base.getProjectPath()+"/templates/";
 }
 
 

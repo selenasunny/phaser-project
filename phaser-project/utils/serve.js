@@ -6,8 +6,9 @@
 var http        = require('http');
 var path        = require('path');
 var express     = require('express');
-var routes      = require('../web/routes');
-var examples    = require('../web/routes/examples');
+var base        = require('./base');
+var routes      = require(base.getWebPath()+'/routes');
+var examples    = require(base.getWebPath()+'/routes/examples');
 
 
 serve = {
@@ -17,15 +18,15 @@ serve = {
 
         // all environments
         app.set('port', port || 8000);
-        app.set('views', process.cwd() + '/phaser-project/web/views');
+        app.set('views', base.getWebPath()+'/views');
         app.set('view engine', 'hjs');
         app.use(express.favicon());
         app.use(express.logger('dev'));
         app.use(express.bodyParser());
         app.use(express.methodOverride());
         app.use(app.router);
-        app.use(express.static(process.cwd()+'/phaser-project/web/public'));
-        app.use(express.static(path.join(process.cwd(), 'projects')));
+        app.use(express.static(base.getWebPath()+'/public'));
+        app.use(express.static(base.getProjectPath()));
 
         // development only
         if ('development' == app.get('env')) {
