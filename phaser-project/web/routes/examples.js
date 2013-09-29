@@ -1,7 +1,8 @@
 var fs = require('fs');
 
 exports.index = function (req, res){
-    var list = fs.readdirSync(process.cwd()+'/examples/');
+    var loc     = process.cwd()+'/phaser-project/web/public/examples/';
+    var list    = fs.readdirSync(loc);
     list.splice(list.indexOf('assets'),1);
 
     var examples = [];
@@ -11,7 +12,7 @@ exports.index = function (req, res){
         if(i.indexOf('.') == -1) {
             var dir = {name : i, files: []};
 
-            var filelist =  fs.readdirSync(process.cwd()+'/examples/'+i);
+            var filelist =  fs.readdirSync(loc+i);
             for (file in filelist) {
                 k = filelist[file];
                 ind = k.indexOf(".example.html"); 

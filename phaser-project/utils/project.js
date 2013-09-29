@@ -10,8 +10,8 @@ self = module.exports;
 
 function Project() {
     this.default_template   = "hello_phaser";
-    this.base_project_path  = "./projects/userprojects/";
-    this.base_template_path = "./projects/templates/";
+    this.base_project_path  = process.cwd()+"/projects/userprojects/";
+    this.base_template_path = process.cwd()+"/projects/templates/";
 }
 
 
@@ -52,11 +52,11 @@ Project.prototype.make = function(project, base_project) {
         fs.mkdirSync(path+'/phaser/build');
         fs.mkdirSync(path+'/phaser/src');
 
-        wrench.copyDirSyncRecursive('./node_modules/Phaser/build', path+"/phaser/build/", {
+        wrench.copyDirSyncRecursive(process.cwd()+'/node_modules/Phaser/build', path+"/phaser/build/", {
             preserveFiles:  true,
             forceDelete:    true
         });
-        wrench.copyDirSyncRecursive('./node_modules/Phaser/src', path+"/phaser/src/", {
+        wrench.copyDirSyncRecursive(process.cwd()+'/node_modules/Phaser/src', path+"/phaser/src/", {
             preserveFiles:  true,
             forceDelete:    true
         });

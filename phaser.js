@@ -6,9 +6,9 @@ var wrench      = require('wrench');
 //var express = require('express');
 var program     = require('commander');
 var https       = require('https');
-var versionFile = require('./utils/versionfile');
-var serve       = require('./utils/serve');
-var project     = require('./utils/project');
+var versionFile = require('./phaser-project/utils/versionfile');
+var serve       = require('./phaser-project/utils/serve');
+var project     = require('./phaser-project/utils/project');
 
 
 versionFile.initialize();
