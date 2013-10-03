@@ -72,7 +72,7 @@ program.command('engine:versions')
     .description('displays a list of available phaser versions')
     .action(function() {
         process.stdout.write("Fetching Phaser version list: \n");
-        versions.getAvailable(function(tags) { console.log(tags); });
+        versions.fetchAvailable(function(tags) { console.log(tags); });
     });
 
 
@@ -83,8 +83,8 @@ program.command('engine:versions')
 program.command('engine:update')
     .description('Downloads the latest version of the phaser engine')
     .action(function () {
-        versions.getAvailable(function(vers) {
-            var myLatest    = versions._latestLocal();
+        versions.fetchAvailable(function(vers) {
+            var myLatest    = versions.getLatest();
             var realLatest  = versions._latestInList(vers);
 
             if (semver.eq(myLatest, realLatest)) {
@@ -93,7 +93,7 @@ program.command('engine:update')
             }
 
             process.stdout.write("Downloading "+realLatest+"\n");
-            versions.getVersion(realLatest, function() {
+            versions.downloadVersion(realLatest, function() {
                 process.stdout.write("Downloaded the latest version! ("+realLatest+")\n");
                 versions.syncFileFromFs();
             });

@@ -12,11 +12,12 @@ var self = module.exports;
 
 function Versions() {
     this.path = base.getEnginePath()+"/versions.json";
+    this.current;
 };
 
 
 
-Versions.prototype.getVersion = function(version, cb) {
+Versions.prototype.downloadVersion = function(version, cb) {
     var url     = 'https://github.com/photonstorm/phaser/archive/'+version+'.zip';
     var file    = base.getTempPath()+'/'+version+".zip";
     var dest    = base.getEnginePath();
@@ -38,7 +39,26 @@ Versions.prototype.getVersion = function(version, cb) {
 
 
 
-Versions.prototype.getAvailable = function(cb) {
+Versions.prototype.getInstalled = function() {
+    if (!self.current) {
+        self.readFile();
+    }
+
+    return self.current.installed;
+};
+
+
+Versions.prototype.getLatest = function() {
+    if (!self.current) {
+        self.readFile();
+    }
+
+    return self.current.latest;
+}
+
+
+
+Versions.prototype.fetchAvailable = function(cb) {
 
     //process.stdout.write("Fetching Phaser version list: \n");
 
@@ -90,6 +110,8 @@ Versions.prototype.initFile = function() {
 
 
 Versions.prototype.writeFile = function(structure) {
+    self.current = structure; 
+
     fs.writeFileSync(this.path, JSON.stringify(structure));
 };
 
@@ -97,7 +119,9 @@ Versions.prototype.writeFile = function(structure) {
 Versions.prototype.readFile = function () {
     var data = fs.readFileSync(this.path);
 
-    return JSON.parse(data.toString());
+    self.current = JSON.parse(data.toString());
+
+    return self.current;
 };
 
 
@@ -129,12 +153,6 @@ Versions.prototype.syncFileFromFs = function() {
     self.writeFile(versions);
 
 };
-
-
-Versions.prototype._latestLocal = function() {
-    var data = self.readFile();
-    return data.latest;
-}
 
 
 Versions.prototype._latestInList = function(list) {

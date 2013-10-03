@@ -2,6 +2,7 @@ var fs      = require('fs');
 var wrench  = require('wrench');
 var yesno   = require('yesno');
 var base    = require('./base');
+var versions = require('./versions');
 
 module.exports = new Project;
 self = module.exports;
@@ -52,11 +53,18 @@ Project.prototype.make = function(project, base_project) {
         fs.mkdirSync(path+'/phaser/build');
         fs.mkdirSync(path+'/phaser/src');
 
-        wrench.copyDirSyncRecursive(process.cwd()+'/node_modules/Phaser/build', path+"/phaser/build/", {
+
+        // TODO: take version as an argument?
+        var latest = versions.getLatest();
+
+        var latestPath = base.getEnginePath()+"/"+latest;
+        console.log(latestPath);
+
+        wrench.copyDirSyncRecursive(latestPath+'/build', path+"/phaser/build/", {
             preserveFiles:  true,
             forceDelete:    true
         });
-        wrench.copyDirSyncRecursive(process.cwd()+'/node_modules/Phaser/src', path+"/phaser/src/", {
+        wrench.copyDirSyncRecursive(latestPath+'/src', path+"/phaser/src/", {
             preserveFiles:  true,
             forceDelete:    true
         });
