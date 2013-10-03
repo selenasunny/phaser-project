@@ -21,7 +21,7 @@ Versions.prototype.downloadVersion = function(version, cb) {
     var url     = 'https://github.com/photonstorm/phaser/archive/'+version+'.zip';
     var file    = base.getTempPath()+'/'+version+".zip";
     var dest    = base.getEnginePath();
-
+    
     var req     = request(url);
     req.pipe(fs.createWriteStream(file))
 
@@ -104,7 +104,7 @@ Versions.prototype.initFile = function() {
             latest: null
         };
 
-        this.write(structure);
+        this.writeFile(structure);
     }
 };
 

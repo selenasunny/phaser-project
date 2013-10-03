@@ -86,8 +86,8 @@ program.command('engine:update')
         versions.fetchAvailable(function(vers) {
             var myLatest    = versions.getLatest();
             var realLatest  = versions._latestInList(vers);
-
-            if (semver.eq(myLatest, realLatest)) {
+             
+            if (myLatest && semver.valid(myLatest) && semver.eq(myLatest, realLatest)) {
                 process.stdout.write("Latest version is "+realLatest+"; already installed.\n");
                 process.exit(0);
             }
