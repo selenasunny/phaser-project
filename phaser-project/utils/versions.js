@@ -58,6 +58,13 @@ Versions.prototype.getLatest = function() {
 
 
 
+Versions.prototype.getLatestRemote = function(cb) {
+    self.fetchAvailable(function(tags) {
+        cb(self._latestInList(tags));
+    });
+}
+
+
 Versions.prototype.fetchAvailable = function(cb) {
 
     //process.stdout.write("Fetching Phaser version list: \n");
@@ -143,6 +150,7 @@ Versions.prototype.syncFileFromFs = function() {
     }
 
     if (versions.installed.length == 0) {
+        versions.latest=null;
         self.writeFile(versions);
         return;
     }

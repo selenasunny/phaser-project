@@ -15,6 +15,18 @@ var project     = require(base.getPhaserProjectPath()+'/utils/project');
 
 versions.initFile();
 versions.syncFileFromFs();
+if(!versions.getLatest()) 
+{
+    process.stdout.write("It looks like this is the first time you've used Phaser-Project\n");
+    process.stdout.write("Please wait while the latest version of Phaser is downloaded for you...\n");
+    versions.getLatestRemote(function(latest) {
+        process.stdout.write("\nLatest version is: "+latest+". Downloading...\n");
+        versions.downloadVersion(latest, function() {});
+    });
+    return;
+}
+
+
 
 /**
  * Command for creating a new project
