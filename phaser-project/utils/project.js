@@ -3,6 +3,7 @@ var wrench  = require('wrench');
 var yesno   = require('yesno');
 var base    = require('./base');
 var versions = require('./versions');
+var semver  = require('semver');
 
 module.exports = new Project;
 self = module.exports;
@@ -20,6 +21,11 @@ Project.prototype.make = function(project, base_project, ver) {
 
     var path = self.base_project_path+project;
     
+    if(!ver && semver.valid(base_project)) {
+        ver = base_project;
+        base_project = null; 
+    }
+
     if (!base_project) {
         base_project = self.default_template;
     }
