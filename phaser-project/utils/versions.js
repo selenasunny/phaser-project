@@ -57,7 +57,7 @@ Versions.prototype.downloadVersion = function(version, cb) {
 
         req.on('end', function() {
             var zp = new zip(file);
-            //zipEntries = zp.getEntries();
+         
             zp.extractAllTo(dest, /*overwrite*/true);
             fs.renameSync(dest+"/phaser-"+version, dest+"/"+version);
 
@@ -85,7 +85,7 @@ Versions.prototype.getLatest = function() {
     }
 
     return self.current.latest;
-}
+};
 
 
 
@@ -93,7 +93,7 @@ Versions.prototype.getLatestRemote = function(cb) {
     self.fetchAvailable(function(tags) {
         cb(self._latestInList(tags));
     });
-}
+};
 
 
 Versions.prototype.fetchAvailable = function(cb) {
@@ -120,7 +120,7 @@ Versions.prototype.fetchAvailable = function(cb) {
                     tags.push(tagData.ref.replace(/refs\/tags\//,''));
                 }
                 cb(tags);
-                //console.log(tags);
+
             });
         }
     );
@@ -130,7 +130,7 @@ Versions.prototype.fetchAvailable = function(cb) {
     });
 
     req.end();
-}
+};
 
 
 
@@ -211,4 +211,4 @@ Versions.prototype._latestInList = function(list) {
     }
 
     return latest;
-}
+};
