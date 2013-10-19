@@ -18,21 +18,31 @@ function Versions() {
 
 
 Versions.prototype.downloadVersion = function(version, cb) {
-    var url     = 'https://github.com/photonstorm/phaser/archive/'+version+'.zip';
-    var file    = base.getTempPath()+'/'+version+".zip";
-    var dest    = base.getEnginePath();
-    
-    var req     = request(url);
-    req.pipe(fs.createWriteStream(file))
+    self.fetchAvailable(function(list) {
+
+        if (list.indexOf(version) == -1) {
+            process.stdout.write("No such version "+version+" exists.\n");
+            process.exit();
+        }
+
+        process.stdout.write("Found version "+version+"; Downloading...\n");
+        var url     = 'https://github.com/photonstorm/phaser/archive/'+version+'.zip';
+        var file    = base.getTempPath()+'/'+version+".zip";
+        var dest    = base.getEnginePath();
+        
+        var req     = request(url);
+        req.pipe(fs.createWriteStream(file));
 
 
-    req.on('end', function() {
-        var zp = new zip(file);
-        //zipEntries = zp.getEntries();
-        zp.extractAllTo(dest, /*overwrite*/true);
-        fs.renameSync(dest+"/phaser-"+version, dest+"/"+version);
+        req.on('end', function() {
+            var zp = new zip(file);
+            //zipEntries = zp.getEntries();
+            zp.extractAllTo(dest, /*overwrite*/true);
+            fs.renameSync(dest+"/phaser-"+version, dest+"/"+version);
 
-        cb(version);
+            cb(version);
+        });
+
     });
 
 };

@@ -84,7 +84,19 @@ program.command('engine:versions')
     .description('displays a list of available phaser versions')
     .action(function() {
         process.stdout.write("Fetching Phaser version list: \n");
-        versions.fetchAvailable(function(tags) { console.log(tags); });
+        versions.fetchAvailable(function(tags) { 
+            var installed = versions.getInstalled();
+
+            for (i in tags) {
+                process.stdout.write(tags[i]);
+
+                if(installed.indexOf(tags[i]) != -1) {
+                    process.stdout.write(" *installed");
+                }
+                
+                process.stdout.write("\n");
+            }
+        });
     });
 
 
@@ -112,5 +124,15 @@ program.command('engine:update')
         });
     });
 
+
+program.command('engine:install')
+    .description('Attempts to download a specific version of the phaser engine')
+    .action(function (version) {
+        versions.downloadVersion(version, function () {
+            process.stdout.write('Version '+version+' installed.\n');
+            versions.syncFileFromFs();
+        });
+
+    });
 
 program.parse(process.argv);

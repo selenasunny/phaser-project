@@ -16,12 +16,16 @@ function Project() {
 }
 
 
-Project.prototype.make = function(project, base_project) {
+Project.prototype.make = function(project, base_project, version) {
 
     var path = self.base_project_path+project;
     
     if (!base_project) {
         base_project = self.default_template;
+    }
+
+    if(!version) {
+        version = versions.getLatest();
     }
 
     if (! fs.existsSync(self.base_template_path+base_project)) {
@@ -54,10 +58,7 @@ Project.prototype.make = function(project, base_project) {
         fs.mkdirSync(path+'/phaser/src');
 
 
-        // TODO: take version as an argument?
-        var latest = versions.getLatest();
-
-        var latestPath = base.getEnginePath()+"/"+latest;
+        var latestPath = base.getEnginePath()+"/"+version;
         console.log(latestPath);
 
         wrench.copyDirSyncRecursive(latestPath+'/build', path+"/phaser/build/", {
