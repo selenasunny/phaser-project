@@ -16,6 +16,27 @@ function Versions() {
 };
 
 
+Versions.prototype.versionExistsLocal = function (version, cb) {
+    var installed = self.getInstalled();
+
+    if (installed.indexOf(version) == -1) {
+        cb(false);
+    } else {
+        cb(true);
+    }
+};
+
+
+Versions.prototype.versionExists = function (version, cb) {
+    self.fetchAvailable(function (vers) {
+        if (vers.indexOf(version) == -1) {
+            cb(false);
+        } else {
+            cb(true);
+        }
+    });
+};
+
 
 Versions.prototype.downloadVersion = function(version, cb) {
     self.fetchAvailable(function(list) {

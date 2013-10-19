@@ -32,7 +32,7 @@ if(!versions.getLatest())
  * Command for creating a new project
  * 
  */
-program.command('project:make [project] [base_project]')
+program.command('project:make [project] [base_project] [phaser-version]')
     .description('Create a new Phaser project')
     .action(project.make);
 
@@ -78,35 +78,37 @@ program.command('serve [port]')
 
 /**
  * Command to show the list of available Phaser engine versions
- * 
  */
 program.command('engine:versions')
     .description('displays a list of available phaser versions')
     .action(function() {
+
         process.stdout.write("Fetching Phaser version list: \n");
         versions.fetchAvailable(function(tags) { 
-            var installed = versions.getInstalled();
 
             for (i in tags) {
                 process.stdout.write(tags[i]);
 
-                if(installed.indexOf(tags[i]) != -1) {
-                    process.stdout.write(" *installed");
-                }
-                
+                versions.versionExistsLocal(tags[i], function(result) {
+                    if (result) {
+                        process.stdout.write(" *installed");
+                    }
+                });
+                  
                 process.stdout.write("\n");
             }
         });
+        
     });
 
 
 /**
- * 
- * 
+ * Update to the latest phaser engine version
  */
 program.command('engine:update')
     .description('Downloads the latest version of the phaser engine')
     .action(function () {
+
         versions.fetchAvailable(function(vers) {
             var myLatest    = versions.getLatest();
             var realLatest  = versions._latestInList(vers);
@@ -122,17 +124,23 @@ program.command('engine:update')
                 versions.syncFileFromFs();
             });
         });
+
     });
 
 
+/**
+ * Install a particular version of the phaser engine
+ */
 program.command('engine:install')
     .description('Attempts to download a specific version of the phaser engine')
     .action(function (version) {
+
         versions.downloadVersion(version, function () {
             process.stdout.write('Version '+version+' installed.\n');
             versions.syncFileFromFs();
         });
 
     });
+
 
 program.parse(process.argv);

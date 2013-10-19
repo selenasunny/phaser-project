@@ -16,7 +16,7 @@ function Project() {
 }
 
 
-Project.prototype.make = function(project, base_project, version) {
+Project.prototype.make = function(project, base_project, ver) {
 
     var path = self.base_project_path+project;
     
@@ -24,8 +24,8 @@ Project.prototype.make = function(project, base_project, version) {
         base_project = self.default_template;
     }
 
-    if(!version) {
-        version = versions.getLatest();
+    if(!ver) {
+        ver = versions.getLatest();
     }
 
     if (! fs.existsSync(self.base_template_path+base_project)) {
@@ -58,8 +58,8 @@ Project.prototype.make = function(project, base_project, version) {
         fs.mkdirSync(path+'/phaser/src');
 
 
-        var latestPath = base.getEnginePath()+"/"+version;
-        console.log(latestPath);
+        var latestPath = base.getEnginePath()+"/"+ver;
+        console.log("Creating project with Phaser Engine version "+ver);
 
         wrench.copyDirSyncRecursive(latestPath+'/build', path+"/phaser/build/", {
             preserveFiles:  true,
