@@ -4,7 +4,7 @@ var self = module.exports;
 
 
 function BaseConfig() {
-    this.base_path = process.cwd();
+    this.base_path = __dirname+'/../../';
 };
 
 

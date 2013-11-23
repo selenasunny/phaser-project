@@ -13,6 +13,12 @@ var serve       = require(base.getPhaserProjectPath()+'/utils/serve');
 var project     = require(base.getPhaserProjectPath()+'/utils/project');
 
 
+var hs = require(base.getPhaserProjectPath()+"/utils/home");
+
+
+console.log(hs.getHomedir());
+process.exit()
+
 versions.initFile();
 versions.syncFileFromFs();
 if(!versions.getLatest()) 
